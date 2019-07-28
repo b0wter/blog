@@ -9,7 +9,9 @@ showFullContent = false
 +++
 
 ## Getting started
-This article explains how to use a simple shell script to create a release on GitHub. You don't need to know a lot about shell scripting, the commands are rather simple. However, you should be familiar with bash variables and how to capture the output of shell commands. If you feel like you need additional information contact me on [Twitter](https://twitter.com/b0wter) and check the official GitHub [API docs](https://developer.github.com/v3/).
+This article explains how to use a simple shell script to create a release on GitHub. You don't need to know a lot about shell scripting, the commands are rather simple. However, you should be familiar with bash variables and how to capture the output of shell commands. 
+
+If you feel like you need additional information contact me on [Twitter](https://twitter.com/b0wter) and check the official GitHub [API docs](https://developer.github.com/v3/).
 
 The first thing you'll need to do is create a _Personal Access Token_ on [GitHub](https://github.com/settings/tokens). This is used to authenticate your script and you should keep this key private. Do **not** make it a part of the repository! The token requires the _repo_ scope. Save the token to a file named "credentials.sh" in the folder where you will be storing your the script. Open the credentials file and prepend the api key like this:
 
@@ -54,7 +56,7 @@ fi
 ```
 
 ### Create the release
-This is just how I build one of my .Net core projects. Your project will (most likely) require different steps. Since .Net core allows me to create standalone releases for each architecture my build script creates a release for all of the common architectures (Linux, Windows, OSX).
+This is how I build one of my .Net core projects. Your project will (most likely) require different steps. Since .Net core allows me to create standalone releases for each architecture my build script creates a release for all of the common architectures (Linux, Windows, OSX).
 
 ```bash
 VERSIONS=(linux-x64 win10-x64 osx-x64)
@@ -169,7 +171,7 @@ Let's break this up:
   }
 ]
 ```
-We need a way to easily extract the information we need. `jq` works in a similar way to xpath selectors in XML. `'.[].tag_name'` says: give me the value of `tag_name` for all items in the list. Check [this](https://thoughtbot.com/blog/jq-is-sed-for-json) for details.
+We need a way to easily extract the useful information. `jq` works in a similar way to xpath selectors in XML. `'.[].tag_name'` says: give me the value of `tag_name` for all items in the list. Check [this](https://thoughtbot.com/blog/jq-is-sed-for-json) for details.
 
 Now that we have a list of all tag names for our repository we need to check if it contains `$NEW_TAG` and create a new release.
 
@@ -179,7 +181,7 @@ if [[ $RELEASES != *"$NEW_TAG"* ]]; then
 	echo "The release does not exist, creating a new one."
 	curl --request POST --header "Authorization: token $GITHUB_ACCESS_KEY" --header "Content-Type: application/json" --data "{\"tag_name\": \"$NEW_TAG\",\"target_commitish\": \"master\"}" $REMOTE/repos/$OWNER/$PROJECT_NAME/releases | jq '.id'
 else
-	echo "The release exists."
+	echo "The release exists already."
 	exit 1
 fi
 ```
@@ -274,7 +276,7 @@ Let's disect the `curl` command:
 That's it, we're done! The new release should now be visible on your project page on GitHub!
 
 ## Where to go
-This script works best in combination with other scripts. E.g. a build script and a script to [automatically create incrementing git tags](/auto-increment-git-release-tags).
+This script works best in combination with other scripts. E.g. a build script and a script to [automatically create incrementing git tags](/posts/create-release-script/)).
 
 ## Complete listing
 ```bash

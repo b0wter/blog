@@ -36,13 +36,13 @@ docker stop $(docker ps -a -q)
 ```
 
 ## Remove all containers
-This will only delete stopped containers.
+This will delete only stopped containers.
 ```
 docker rm $(docker ps -a -q)
 ```
 
 ## Remove all images
-This will only delete images not in use.
+This will delete only images not in use.
 ```
 docker rmi $(docker images -q)
 ```
