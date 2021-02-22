@@ -1,9 +1,9 @@
 +++
-title = "Use a script to send push notifications to your phone."
-date = "2019-10-01T10:19:03.284Z"
+title = "Use a script to send push notifications to your phone"
+date = "2019-10-01T08:54:19.931"
 author = "b0wter"
 cover = ""
-tags = ["infrastructure", "bash"]
+tags = ["infrastructure", "shell", "bash"]
 description = "Learn how to send push notifications to your phone using pushover.net and bash."
 showFullContent = false
 +++
@@ -45,11 +45,4 @@ fi
 
 wget https://api.pushover.net/1/messages.json --post-data="token=$APP_TOKEN&user=$USER_TOKEN&message=$MESSAGE&title=$TITLE" -qO- > /dev/null 2>&1 &
 ```
-The script will take all parameters you give it and turn them into a message. Note that quotes are optional but not using them may cause some unwanted behaviour. Especially, if you're using anything that bash thinks it should do something with, like an asteriks.
-
-You may supply a title by using '--title="My title"' as the **first** argument. Examples:
-
-```bash
-./push --title="Execution finished" "Changing file permissions for all files in the storage folder completed"
-./push "Rsyncing files finished."
-```
+After creating a pushover.net account you can create a new app in the webinterface and retrieve your `APP_TOKEN` as well as your `USER_TOKEN`.
